@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}{{ post.title_tag }}{% endblock %}
+
+
+{% block content %}
+
+{% if author %}
+
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-2 card-img-height">
+      <img src="{{ author.profile.profile_pic.url }}" class="card-img" width="100%" height="100%">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        By <h6 class="card-title" style="display:inline;">{{ author.first_name }} {{ author.last_name }}</h6>
+        <p class="card-text">{{ author.profile.bio }}</p>
+          <a href="{% url 'aboutme' %}" class="btn btn-primary">Read More</a>
+          <hr>
+          <p class="contact">
+              {% if author.profile.facebook_url %}
+      <a style="margin-right:10px;" href="{{ author.profile.facebook_url }}" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+              {% endif %}
+              {% if author.profile.instagram_url %}
+      <a style="margin-right:10px;" href="{{ author.profile.instagram_url }}" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+              {% endif %}
+              {% if author.profile.twitter_url %}
+      <a style="margin-right:10px;" href="{{ author.profile.twitter_url }}" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+              {% endif %}
+
+      <a style="margin-right:10px;" href="#" title="Contact"><i class="fa fa-envelope"></i></a>
+
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+<br><br>
+<div class="articlemain">
+<div class="text-center">
+<h1>{{post.title}}</h1>
+
+<i class="fa fa-user text-left" aria-hidden="true" style="margin-right:10px"> {{post.author.first_name}} {{post.author.last_name}}</i>
+    <i class="fa fa-clock-o text-left" aria-hidden="true" style="margin-right:10px"> {{ post.get_readtime }}</i>
+
+
+{% if not post.draft %}
+<i class="fa fa-calendar text-left" aria-hidden="true" style="margin-right:10px"> Published on   {{ post.post_date|date:"M j,Y" }}</i>
+{% else %}
+     <i class="fa fa-calendar text-left" aria-hidden="true" style="margin-right:10px">Publish will be on  {{ post.publish|date:"M j,Y" }}</i>
+{% endif %}
+
+    {% load hitcount_tags %}
+
+{% get_hit_count for object as views %}
+
+{% if hitcount.total_hits == 1 %}
+<i class="fa fa-eye" aria-hidden="true"> {% get_hit_count for object %} View</i>
+{% else %}
+<i class="fa fa-eye" aria-hidden="true"> {% get_hit_count for object %} Views</i>
+{% endif %}
+
+    <br><br>
+
+<small>
+{% if user.is_authenticated %}
+        {% if user.id == post.author.id %}
+            <a href="{% url 'update-Blog' post.slug %}" class="btn btn-primary" style="padding:6px 15px;margin:3px;">Edit</a>
+            <a href="{% url 'delete-Blog' post.slug %}" class="btn btn-primary" style="padding:6px 15px;margin:3px;">Delete </a>
+        {% endif %}
+    {% endif %}
+    </small>
+
+     <br>
+    <br>
+    </div>
+
+
+{% if post.image %}
+<img src="{{ post.image.url }}" class="img-fluid img-thumbnail"/>
+{% endif %}
+
+<br>
+<hr>
+<p>{{ post.body|safe }}</p>
+
+<br>
+<a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+
+    <hr>
+    {% if similar %}
+
+<h2>Related Posts</h2>
+<br>
+
+<div class="card-deck">
+
+{% for x in similar %}
+        {% if not x.draft %}
+
+  <div class="card">
+    <img src="{{ x.image.url }}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'article-detail' x.slug %}">{{ x.title|upper }}</a></h5>
+      <p class="card-text">{{ x.snippet | safe }}</p>
+<!--      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+    </div>
+  </div>
+
+    {% endif %}
+{% endfor %}
+
+</div>
+
+{% endif %}
+<hr>
+{% if post.tags.all %}
+Tags:
+    {% for x in post.tags.all %}
+    <a href="{% url 'tagged' x.slug %}" class="btn btn-primary" style="padding:6px 15px;margin:3px;">{{x}}</a>
+<!--        {% if not forloop.last %}, {% endif %}-->
+    {% endfor %}
+{% endif %}
+
+{% load social_share %}
+Share Post:
+{% post_to_facebook object_or_url "Facebook" %}-
+{% post_to_twitter "New Song: {{object.title}}. Check it out!" object_or_url "Twitter" %}-
+{% post_to_gplus object_or_url "Google+" %}-
+<!--{% post_to_linkedin object_or_url %}- -->
+{% send_email object.title "New Song: {{object.title}}. Check it out!" object_or_url "Email" %}-
+{% post_to_whatsapp object_or_url "WhatsApp" %}
+    <br>
+
+<hr>
+
+    </div>
+
+<br><br>
+
+
+{% endblock %}

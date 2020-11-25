@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      .goog-te-banner-frame.skiptranslate {
+    display: none !important;
+    }
+body {
+    top: 0px !important;
+    }
+    .goog-logo-link {
+   display:none !important;
+}
+
+.goog-te-gadget{
+   color: transparent !important;
+}
+
+.goog-te-combo
+{
+        display: block;
+    /* width: 100%; */
+    /* height: calc(1.5em + .75rem + 2px); */
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: rgba(255,255,255,.5);
+    background-color: #343a40;
+    background-clip: padding-box;
+    /*border: 1px solid #ced4da;*/
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+ul li
+{
+    margin:20px 5px 0 5px!important;
+}
+.navbar-brand
+{
+margin:5px!important;
+}
+
+.card-img
+{
+    border-radius:50%!important;
+}
+
+.card-img-height
+{
+    padding:10px!important;
+}
+
+.facebook-this,.tweet-this,.gplus-this,.linkedin-this,.whatsapp-this,.mail-this
+{
+    display:inline;
+}
+
+body
+{
+background:#eee;
+}
+
+.articlemain
+{
+background:#fff!important;
+padding:30px;
+}
+
+    </style>
+
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'home' %}">My awesome blog</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+        <li class="nav-item">
+               <a class="nav-link" href="{% url 'categoryListView' %}">Categories</a>
+            </li>
+
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+               <a class="nav-link" href="{% url 'tag' %}">Tags</a>
+            </li>
+             <li class="nav-item">
+               <a class="nav-link" href="{% url 'addBlog' %}">Add Post</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'addCategory' %}">Add Category</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'edit_profile' user.pk %}">Edit Profile</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'draft' %}">Draft Posts</a>
+            </li>
+              <li class="nav-item">
+               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+      {% else %}}
+              <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Register</a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">login</a>
+              </li>
+      {% endif %}
+
+        <li class="nav-item dropdown float-right">
+                <div id="google_translate_element"></div>
+        </li>
+
+    </ul>
+  </div>
+
+</nav>
+
+    <br>
+    <div class="container">
+    {% block content %}
+
+    {% endblock %}
+  </div>
+
+
+
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>
+      function googleTranslateElementInit()
+      {
+            new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element');
+      }
+  </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  </body>
+</html>

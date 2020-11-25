@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% if author %}
+
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-2 card-img-height">
+      <img src="{{ author.profile.profile_pic.url }}" class="card-img" width="100%" height="100%">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{ author.first_name }} {{ author.last_name }}</h5>
+        <p class="card-text">{{ author.profile.bio }}</p>
+          <a href="{% url 'aboutme' %}" class="btn btn-primary">Read More</a>
+          <hr>
+          <p class="contact">
+              {% if author.profile.facebook_url %}
+      <a style="margin-right:10px;" href="{{ author.profile.facebook_url }}" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+              {% endif %}
+              {% if author.profile.instagram_url %}
+      <a style="margin-right:10px;" href="{{ author.profile.instagram_url }}" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+              {% endif %}
+              {% if author.profile.twitter_url %}
+      <a style="margin-right:10px;" href="{{ author.profile.twitter_url }}" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+              {% endif %}
+
+      <a style="margin-right:10px;" href="#" title="Contact"><i class="fa fa-envelope"></i></a>
+
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+<br><br>
+
+<h1>My Posts ({{ page_obj.paginator.count }})</h1>
+
+<br>
+
+{% for x in object_list %}
+        {% if not x.draft %}
+
+<div class="card">
+    <div class="list-group-item">
+    <h3 class="text-muted text-center">{{ x.title_tag|upper }}<h3>
+    </div>
+    {% if x.image %}
+   <img src="{{ x.image.url }}" class="card-img-top" style="width:100%!important;height:550px!important">
+    {% endif %}
+  <div class="card-body">
+    <h2 class="card-title">{{ x.title }}</h2>
+      <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'categoryList' x.Category.id %}">{{x.Category.name}}</a></h6>
+    <p class="card-text">{{ x.snippet | safe }}</p>
+    <a href="{% url 'article-detail' x.slug %}" class="btn btn-primary">View</a>
+  </div>
+  <div class="card-footer text-muted">
+      <h6 class="card-title" style="display:inline;">
+       <i class="fa fa-calendar text-left" aria-hidden="true" style="margin-right:10px"> {{ x.post_date|date:"M j,Y" }}</i>
+            <i class="fa fa-user text-left" aria-hidden="true" style="margin-right:10px"> {{ x.author.first_name }} {{ x.author.last_name }}</i>
+          <i class="fa fa-clock-o text-left" aria-hidden="true" style="margin-right:10px"> {{ x.get_readtime }}</i>
+
+          {% load hitcount_tags %}
+{% get_hit_count for x as counting %}
+{% if counting|add:"0" <= 1 %}
+<i class="fa fa-eye" aria-hidden="true"> {% get_hit_count for x %} View</i>
+{% else %}
+<i class="fa fa-eye" aria-hidden="true"> {% get_hit_count for x %} Views</i>
+{% endif %}
+      </h6>
+<!--      <h6 style="display:inline;" class="text-right">-->
+<!--          {{ x.post_date|timesince }} ago-->
+<!--      </h6>-->
+
+  </div>
+</div>
+
+
+<br><br>
+
+{% endif %}
+    {% endfor %}
+
+{% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1" >First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}" >Previous</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a class="btn btn-info mb-4" href="?page={{ num }}" >{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ num }}" >{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+     {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}" >Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}" >Last</a>
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

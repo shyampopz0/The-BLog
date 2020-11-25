@@ -1,0 +1,35 @@
+<!--<ul>-->
+<!--    {% for x in object_list %}-->
+<!--    <li><a href="{% url 'article-detail' x.pk %}">{{ x.title }}</a> - <a href="{% url 'categoryList' x.category|slugify %}">{{x.category}}</a>-->
+<!--        - By {{ x.author }} - Published on {{ x.post_date }}<br></li>-->
+<!--    {{ x.snippet | safe }}-->
+<!--    <br>-->
+<!--    {% endfor %}-->
+<!--</ul>-->
+
+
+<div class="card">
+    <div class="list-group-item">
+    <h3 class="text-muted text-center"><h3>
+    </div>
+    {% if x.image %}
+   <img src="{{ x.image.url }}" class="card-img-top" style="width:100%!important;height:550px!important">
+    {% endif %}
+  <div class="card-body">
+    <h2 class="card-title">{{ x.title }}</h2>
+      <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'categoryList' x.Category.id %}">{{x.Category.name}}</a></h6>
+    <p class="card-text">{{ x.snippet | safe }}</p>
+    <a href="{% url 'article-detail' x.slug %}" class="btn btn-primary">View</a>
+  </div>
+  <div class="card-footer text-muted">
+      <h6 class="card-title" style="display:inline;">
+       <i class="fa fa-calendar text-left" aria-hidden="true" style="margin-right:10px"> {{ x.post_date }}</i>
+            <i class="fa fa-user text-left" aria-hidden="true" style="margin-right:10px"> {{ x.author.first_name }} {{ x.author.last_name }}</i>
+          <i class="fa fa-clock-o text-left" aria-hidden="true" style="margin-right:10px"> {{ x.get_readtime }}</i>
+      </h6>
+<!--      <h6 style="display:inline;" class="text-right">-->
+<!--          {{ x.post_date|timesince }} ago-->
+<!--      </h6>-->
+
+  </div>
+</div>

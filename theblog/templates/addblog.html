@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+
+{% block title %}Add Blog{% endblock %}
+
+{% block content %}
+
+<div class="articlemain">
+
+<h1>Add Blog</h1>
+
+
+<div class="form-group">
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.media }}
+    {{ form.as_p }}
+
+    <input type="submit" class="btn btn-secondary">
+</form>
+    </div>
+
+    </div>
+
+<script>
+    var name = "{{ user.id }}";
+    document.getElementById("id_author").value = name;
+
+    var today = new Date();
+
+    function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var sec = date.getSeconds();
+
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  sec = sec < 10 ? '0'+sec : sec;
+  hours = hours < 10 ? '0'+hours : hours;
+
+  var strTime = hours + ':' + minutes +":"+sec;
+  return strTime;
+}
+
+
+    document.getElementById("id_publish").value = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+
+    ' '+ formatAMPM(new Date);
+
+</script>
+
+<br><br>
+
+{% endblock %}
